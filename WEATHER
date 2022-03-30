@@ -1,0 +1,13 @@
+LAMBDA(location, apikey,
+    LET(
+        xml, WEBSERVICE(
+            "https://api.weatherapi.com/v1/forecast.xml?key=" & apikey & "&q="&
+                location & "&days=3" & "&aqi=no&alerts=no"
+        ),
+        dates, FILTERXML(xml, "//forecast/forecastday/date"),
+        mintemp, FILTERXML(xml, "//forecast/forecastday/day/mintemp_c"),
+        maxtemp, FILTERXML(xml, "//forecast/forecastday/day/maxtemp_c"),
+        return, CHOOSE({1, 2, 3}, dates, mintemp, maxtemp),
+        return
+    )
+)
